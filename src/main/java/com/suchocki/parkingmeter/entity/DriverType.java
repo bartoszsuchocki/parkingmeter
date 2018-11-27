@@ -1,17 +1,28 @@
 package com.suchocki.parkingmeter.entity;
 
-import java.math.BigDecimal;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DriverType {
-	private String typeName;
-	private Map<Currency, BigDecimal> cost; // this will store cost in different currencies
+	private String typeName; // typeName will be primary key in database
 
-	public DriverType() {;}
+	private List<ParkingCost> costs; // costs will store parking costs in different currencies
+
+	public DriverType() {
+		;
+	}
+
 	public DriverType(String name) {
 		this.typeName = name;
 	}
-	
+
+	public void addCost(ParkingCost cost) {
+		if (costs == null) {
+			costs = new ArrayList<>();
+		}
+		costs.add(cost);
+	}
+
 	public String getTypeName() {
 		return typeName;
 	}
@@ -20,12 +31,21 @@ public class DriverType {
 		this.typeName = typeName;
 	}
 
-	public Map<Currency, BigDecimal> getCost() {
-		return cost;
+	public List<ParkingCost> getCosts() {
+		return costs;
 	}
 
-	public void setCost(Map<Currency, BigDecimal> cost) {
-		this.cost = cost;
+	public void setCosts(List<ParkingCost> costs) {
+		this.costs = costs;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof DriverType)) {
+			return false;
+		}
+		DriverType otherDriverType = (DriverType) object;
+		return otherDriverType.getTypeName().equals(this.typeName);
 	}
 
 }

@@ -3,6 +3,7 @@ package com.suchocki.parkingmeter.entity;
 import java.util.Date;
 
 public class ParkAction {
+	private int id; //this will be primary key in database
 	private Date start;
 	private Date end;
 	private Driver driver;
@@ -14,6 +15,14 @@ public class ParkAction {
 	public ParkAction(Date start, Driver driver) {
 		this.start = start;
 		this.driver = driver;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Date getStart() {

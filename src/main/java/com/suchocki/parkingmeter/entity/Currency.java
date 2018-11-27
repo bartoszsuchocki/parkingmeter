@@ -2,7 +2,16 @@ package com.suchocki.parkingmeter.entity;
 
 public class Currency {
 	private String name;
-	private String acronym; // this would be id in the db;
+	private String acronym; // this will be primary key in database;
+
+	public Currency() {
+
+	}
+
+	public Currency(String name, String acronym) {
+		this.name = name;
+		this.acronym = acronym;
+	}
 
 	public String getName() {
 		return name;
@@ -19,5 +28,4 @@ public class Currency {
 	public void setAcronym(String acronym) {
 		this.acronym = acronym;
 	}
-
 }
