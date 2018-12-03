@@ -19,5 +19,5 @@ public interface DriverService {
 
 	public List<DriverCharge> checkChargeForParkingTillNow(String licensePlate);
 
-	public DriverPayment pay(Driver driver, Currency currency);
+	public DriverPayment pay(DriverPayment payment);
 }

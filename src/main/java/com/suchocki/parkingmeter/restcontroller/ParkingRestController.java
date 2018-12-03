@@ -1,9 +1,7 @@
 package com.suchocki.parkingmeter.restcontroller;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.suchocki.parkingmeter.entity.Driver;
 import com.suchocki.parkingmeter.entity.DriverCharge;
 import com.suchocki.parkingmeter.entity.DriverPayment;
 import com.suchocki.parkingmeter.entity.ParkAction;
 import com.suchocki.parkingmeter.propertyeditor.DatePropertyEditor;
+import com.suchocki.parkingmeter.service.DriverPaymentService;
 import com.suchocki.parkingmeter.service.DriverService;
-import com.suchocki.parkingmeter.service.ParkActionService;
 
 @RestController
 @RequestMapping("/api")
@@ -30,7 +27,7 @@ public class ParkingRestController {
 	private DriverService driverService;
 
 	@Autowired
-	private ParkActionService parkActionService;
+	private DriverPaymentService driverPaymentService;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -68,25 +65,16 @@ public class ParkingRestController {
 		return driverService.checkChargeForParkingTillNow(licensePlate);
 	}
 
-	/*@PostMapping("/pay")
-	public DriverPayment pay(@RequestBody Driver driver) {
-		
-		
-		
-		return null;
+	@PostMapping("/pay")
+	public DriverPayment pay(@RequestBody DriverPayment payment) {
+		return driverService.pay(payment);
 	}
 
-	@PostMapping("/pay/{licensePlate}")
-	public DriverPayment pay(@PathVariable("licensePlate") String licensePlate) {
-
-		return null;
+	@GetMapping("/earnings/{stringDate}") // date should be in this format: yyyy-mm-dd
+	public List<DriverCharge> getEarning(@PathVariable("stringDate") Date date) {
+		return driverPaymentService.getPaymentsSumByday(date);
 	}
-
-	@GetMapping("/earning/{stringDate}") // date should be in this format: yyyy-mm-dd
-	public BigDecimal getEarning(@PathVariable("stringDate") Date date) {
-
-		return null;
-	}*/
+	// ewentualnie jeszcze /earnings/date/currency
 
 	// dorobic jeszcze /charge/licensePlate
 

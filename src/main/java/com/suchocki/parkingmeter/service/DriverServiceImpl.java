@@ -74,26 +74,9 @@ public class DriverServiceImpl implements DriverService {
 	}
 
 	@Override
-	public DriverPayment pay(Driver driver, Currency currency) {
-		ParkAction lastParkAction = parkActionService.getDriverLastParkAction(driver);
-		if (lastParkAction == null) {
-			return null;
-		}
-		List<DriverCharge> chargesWithDifferentCurrencies = lastParkAction.calculateCharges();
-
-		BigDecimal fee = null;
-		for (DriverCharge charge : chargesWithDifferentCurrencies) {
-			if (charge.getCurrency().equals(currency)) {
-				fee = charge.getFee();
-			}
-		}
-		if (fee == null) {
-			return null; // tu można rzucić wyjątkiem
-		}
-
-		DriverPayment driverPayment = new DriverPayment(currency, fee);
-
-		return driverPayment;
+	public DriverPayment pay(DriverPayment payment) {
+		driverPaymentService.save(payment);
+		return payment;
 	}
 
 	public boolean existsInDb(Driver driver) {
