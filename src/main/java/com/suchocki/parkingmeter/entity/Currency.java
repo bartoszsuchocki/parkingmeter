@@ -28,4 +28,16 @@ public class Currency {
 	public void setAcronym(String acronym) {
 		this.acronym = acronym;
 	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof Currency)) {
+			return false;
+		}
+		Currency otherCurrency = (Currency) object;
+		if (otherCurrency.getAcronym() == null || otherCurrency.getName() == null) {
+			return false;
+		}
+		return otherCurrency.getAcronym().equals(this.acronym) && otherCurrency.getName().equals(this.name);
+	}
 }

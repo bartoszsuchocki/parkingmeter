@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.suchocki.parkingmeter.dao.ParkActionDAO;
+import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.Driver;
+import com.suchocki.parkingmeter.entity.DriverCharge;
 import com.suchocki.parkingmeter.entity.ParkAction;
 
 @Service
@@ -55,6 +57,15 @@ public class ParkActionServiceImpl implements ParkActionService {
 		toFinish.setEnd(new Date());
 		save(toFinish);
 		return toFinish;
+	}
+	
+	@Override
+	public DriverCharge getChargeForADay(Date date) {
+		for(ParkAction parkAction:FakeDatabaseStub.parkActions) {
+//			parkAction
+			//parkAction.getDriver().getDriverType().get
+		}
+		return null;
 	}
 
 }

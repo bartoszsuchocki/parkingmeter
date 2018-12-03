@@ -39,6 +39,15 @@ public class DriverType {
 		this.costs = costs;
 	}
 
+	public ParkingCost getCost(Currency currency) {
+		for (ParkingCost cost : costs) {
+			if (cost.getCurrency().equals(currency)) {
+				return cost;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof DriverType)) {

@@ -1,15 +1,13 @@
 package com.suchocki.parkingmeter.entity;
 
-import java.math.BigDecimal;
-
 public class ParkingCost {
 
 	private int id; // primary key in database
 	private Currency currency;
 
-	private BigDecimal firstHourValue;
-	private BigDecimal secondHOurValue;
-	private BigDecimal overTwoHoursMultiplier;
+	private Double firstHourValue;
+	private Double secondHOurValue;
+	private Double overTwoHoursMultiplier;
 
 	public ParkingCost() {
 		;
@@ -19,8 +17,8 @@ public class ParkingCost {
 		this.currency = currency;
 	}
 
-	public ParkingCost(Currency currency, BigDecimal firstHourValue, BigDecimal secondHOurValue,
-			BigDecimal overTwoHoursMultiplier) {
+	public ParkingCost(Currency currency, Double firstHourValue, Double secondHOurValue,
+			Double overTwoHoursMultiplier) {
 		this.currency = currency;
 		this.firstHourValue = firstHourValue;
 		this.secondHOurValue = secondHOurValue;
@@ -43,27 +41,27 @@ public class ParkingCost {
 		this.currency = currency;
 	}
 
-	public BigDecimal getFirstHourValue() {
+	public Double getFirstHourValue() {
 		return firstHourValue;
 	}
 
-	public void setFirstHourValue(BigDecimal firstHourValue) {
+	public void setFirstHourValue(Double firstHourValue) {
 		this.firstHourValue = firstHourValue;
 	}
 
-	public BigDecimal getSecondHOurValue() {
+	public Double getSecondHOurValue() {
 		return secondHOurValue;
 	}
 
-	public void setSecondHOurValue(BigDecimal secondHOurValue) {
+	public void setSecondHOurValue(Double secondHOurValue) {
 		this.secondHOurValue = secondHOurValue;
 	}
 
-	public BigDecimal getOverTwoHoursMultiplier() {
+	public Double getOverTwoHoursMultiplier() {
 		return overTwoHoursMultiplier;
 	}
 
-	public void setOverTwoHoursMultiplier(BigDecimal overTwoHoursMultiplier) {
+	public void setOverTwoHoursMultiplier(Double overTwoHoursMultiplier) {
 		this.overTwoHoursMultiplier = overTwoHoursMultiplier;
 	}
 
