@@ -16,6 +16,12 @@ public class DriverPayment extends DriverCharge {
 		super(currency, fee);
 	}
 
+	public DriverPayment(Currency currency, BigDecimal fee, Date payDate, Driver driver) {
+		super(currency, fee);
+		this.payDate = payDate;
+		this.driver = driver;
+	}
+
 	public int getId() {
 		return id;
 	}

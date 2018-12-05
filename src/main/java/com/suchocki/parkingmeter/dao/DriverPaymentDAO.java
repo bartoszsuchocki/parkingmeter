@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.suchocki.parkingmeter.entity.DriverPayment;
 
-public interface DriverPaymentDAO {
+public interface DriverPaymentDAO{
 	public void save(DriverPayment driverPayment);
 
 	public DriverPayment get(int id);

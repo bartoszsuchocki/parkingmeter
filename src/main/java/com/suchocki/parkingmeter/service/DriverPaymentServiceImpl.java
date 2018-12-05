@@ -1,9 +1,10 @@
 package com.suchocki.parkingmeter.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.suchocki.parkingmeter.dao.DriverPaymentDAO;
+import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.Currency;
 import com.suchocki.parkingmeter.entity.DriverCharge;
 import com.suchocki.parkingmeter.entity.DriverPayment;
@@ -47,22 +49,32 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 	@Override
 	public List<DriverCharge> getPaymentsSumByday(Date date) {
 
-		Map<Currency, BigDecimal> paymentsSums = new HashMap<>(); // payments sums in different currencies
+		Map<Currency, BigDecimal> paymentsSums = new LinkedHashMap<>(); // payments sums in different currencies
 		List<Currency> currencies = currencyService.getAll();
+
+		System.out.println(getClass().getName() + " Currencies obtained by currencySerivice: " + currencies);
 
 		/* inserting '0 values' in order to add values to them later' */
 		for (Currency currency : currencies) {
-			paymentsSums.put(currency, new BigDecimal(0D));
+			paymentsSums.put(currency, new BigDecimal(0D).setScale(2, RoundingMode.HALF_UP));
 		}
+
 		/* end of inserting '0 values' */
+
+		System.out.println(getClass().getName() + " Map: " + paymentsSums);
 
 		/* summing */
 		List<DriverPayment> paymentsThisDay = getByDay(date);
 		for (DriverPayment payment : paymentsThisDay) {
 			BigDecimal fee = paymentsSums.get(payment.getCurrency());
-			fee = fee.add(payment.getFee());
+			// zabezpieczyć się przed nullami (np. w paymentach)!
+			System.out.println(getClass().getName() + " null tracker: " + fee + " " + payment.getFee());
+			paymentsSums.replace(payment.getCurrency(), fee.add(payment.getFee()).setScale(2, RoundingMode.HALF_UP));
+
 		}
 		/* end of summing */
+
+		System.out.println("DriverPaymentService: obliczona mapa: " + paymentsSums);
 
 		List<DriverCharge> resultList = new ArrayList<>();
 

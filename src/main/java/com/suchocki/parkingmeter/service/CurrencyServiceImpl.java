@@ -38,5 +38,4 @@ public class CurrencyServiceImpl implements CurrencyService {
 	public void delete(String id) {
 		currencyDAO.delete(id);
 	}
-
 }
