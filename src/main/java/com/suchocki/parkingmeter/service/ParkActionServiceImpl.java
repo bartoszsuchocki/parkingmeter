@@ -54,6 +54,9 @@ public class ParkActionServiceImpl implements ParkActionService {
 	@Override
 	public ParkAction finishParkAction(Driver driver) {
 		ParkAction toFinish = parkActionDAO.getDriverLastParkAction(driver);
+		if(toFinish == null) {
+			return null; //walnac wyjatkiem
+		}
 		toFinish.setEnd(new Date());
 		save(toFinish);
 		return toFinish;
