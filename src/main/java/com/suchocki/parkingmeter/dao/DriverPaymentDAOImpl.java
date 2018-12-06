@@ -1,14 +1,10 @@
 package com.suchocki.parkingmeter.dao;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.stereotype.Repository;
-
 import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.DriverPayment;
 

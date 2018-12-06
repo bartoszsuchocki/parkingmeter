@@ -3,7 +3,6 @@ package com.suchocki.parkingmeter.dao;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-
 import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.Driver;
 import com.suchocki.parkingmeter.entity.ParkAction;
@@ -24,7 +23,11 @@ public class ParkActionDAOImpl implements ParkActionDAO {
 
 	@Override
 	public ParkAction get(Integer id) {
-		// TODO Auto-generated method stub
+		for (ParkAction parkAction : FakeDatabaseStub.parkActions) {
+			if (parkAction.getId() == id) {
+				return parkAction;
+			}
+		}
 		return null;
 	}
 
@@ -34,15 +37,25 @@ public class ParkActionDAOImpl implements ParkActionDAO {
 	}
 
 	@Override
-	public void update(ParkAction object) {
-		// TODO Auto-generated method stub
+	public void update(ParkAction parkAction) {
+		for (ParkAction p : FakeDatabaseStub.parkActions) {
+			if (p.getId() == parkAction.getId()) {
+				p.updateProperties(parkAction);
+			}
+		}
 
 	}
 
 	@Override
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-
+		int counter = 0;
+		for (ParkAction parkAction : FakeDatabaseStub.parkActions) {
+			if (parkAction.getId() == id) {
+				break;
+			}
+			counter++;
+		}
+		FakeDatabaseStub.currencies.remove(counter);
 	}
 
 	@Override

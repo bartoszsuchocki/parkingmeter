@@ -27,20 +27,28 @@ public class DriverDAOImpl implements DriverDAO {
 
 	@Override
 	public List<Driver> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return FakeDatabaseStub.drivers;
 	}
 
 	@Override
-	public void update(Driver object) {
-		// TODO Auto-generated method stub
-
+	public void update(Driver driver) {
+		for (Driver d : FakeDatabaseStub.drivers) {
+			if (d.getLicensePlate().equals(driver.getLicensePlate())) {
+				d.updateProperties(driver);
+			}
+		}
 	}
 
 	@Override
-	public void delete(String id) {
-		// TODO Auto-generated method stub
-
+	public void delete(String licensePlate) {
+		int counter = 0;
+		for (Driver d : FakeDatabaseStub.drivers) {
+			if (d.getLicensePlate().equals(licensePlate)) {
+				break;
+			}
+			counter++;
+		}
+		FakeDatabaseStub.drivers.remove(counter);
 	}
 
 }

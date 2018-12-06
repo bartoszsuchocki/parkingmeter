@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.suchocki.parkingmeter.dao.DriverPaymentDAO;
-import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.Currency;
 import com.suchocki.parkingmeter.entity.DriverCharge;
 import com.suchocki.parkingmeter.entity.DriverPayment;
@@ -52,6 +51,10 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 		Map<Currency, BigDecimal> paymentsSums = new LinkedHashMap<>(); // payments sums in different currencies
 		List<Currency> currencies = currencyService.getAll();
 
+		if (currencies == null) {
+			return null;
+		}
+
 		System.out.println(getClass().getName() + " Currencies obtained by currencySerivice: " + currencies);
 
 		/* inserting '0 values' in order to add values to them later' */
@@ -66,15 +69,14 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 		/* summing */
 		List<DriverPayment> paymentsThisDay = getByDay(date);
 		for (DriverPayment payment : paymentsThisDay) {
+			if (payment.getCurrency() == null) {
+				continue;
+			}
 			BigDecimal fee = paymentsSums.get(payment.getCurrency());
-			// zabezpieczyć się przed nullami (np. w paymentach)!
-			System.out.println(getClass().getName() + " null tracker: " + fee + " " + payment.getFee());
 			paymentsSums.replace(payment.getCurrency(), fee.add(payment.getFee()).setScale(2, RoundingMode.HALF_UP));
 
 		}
 		/* end of summing */
-
-		System.out.println("DriverPaymentService: obliczona mapa: " + paymentsSums);
 
 		List<DriverCharge> resultList = new ArrayList<>();
 
@@ -86,5 +88,4 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 
 		return resultList;
 	}
-
 }

@@ -15,6 +15,11 @@ public class Driver {
 
 	// There could be some additional fields like name, surname etc.
 
+	public void updateProperties(Driver otherDriver) {
+		this.licensePlate = otherDriver.getLicensePlate();
+		this.driverType = otherDriver.getDriverType();
+	}
+
 	public String getLicensePlate() {
 		return licensePlate;
 	}

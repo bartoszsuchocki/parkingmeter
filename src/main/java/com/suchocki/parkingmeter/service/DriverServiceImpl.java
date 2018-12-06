@@ -1,6 +1,5 @@
 package com.suchocki.parkingmeter.service;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.suchocki.parkingmeter.dao.DriverDAO;
-import com.suchocki.parkingmeter.entity.Currency;
 import com.suchocki.parkingmeter.entity.Driver;
 import com.suchocki.parkingmeter.entity.DriverCharge;
 import com.suchocki.parkingmeter.entity.DriverPayment;

@@ -38,15 +38,21 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 	public void update(Currency currency) {
 		for (Currency c : FakeDatabaseStub.currencies) {
 			if (c.getAcronym().equals(currency.getAcronym())) {
-				c.setName(currency.getName());
+				c.updateProperties(currency);
 			}
 		}
 	}
 
 	@Override
 	public void delete(String id) {
-		// TODO Auto-generated method stub
-
+		int counter = 0;
+		for (Currency currency : FakeDatabaseStub.currencies) {
+			if (currency.getAcronym().equals(id)) {
+				break;
+			}
+			counter++;
+		}
+		FakeDatabaseStub.currencies.remove(counter);
 	}
 
 }

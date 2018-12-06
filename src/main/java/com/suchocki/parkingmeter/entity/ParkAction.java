@@ -67,6 +67,13 @@ public class ParkAction {
 		return charges;
 	}
 
+	public void updateProperties(ParkAction otherParkAction) {
+		this.driver = otherParkAction.getDriver();
+		this.start = otherParkAction.getStart();
+		this.end = otherParkAction.getEnd();
+		this.id = otherParkAction.getId();
+	}
+
 	public int getId() {
 		return id;
 	}

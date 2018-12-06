@@ -29,6 +29,11 @@ public class Currency {
 		this.acronym = acronym;
 	}
 
+	public void updateProperties(Currency otherCurrency) {
+		this.acronym = otherCurrency.getAcronym();
+		this.name = otherCurrency.getName();
+	}
+
 	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof Currency)) {

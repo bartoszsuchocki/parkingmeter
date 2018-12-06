@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.suchocki.parkingmeter.dao.ParkActionDAO;
-import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.Driver;
-import com.suchocki.parkingmeter.entity.DriverCharge;
 import com.suchocki.parkingmeter.entity.ParkAction;
 
 @Service
@@ -30,20 +28,17 @@ public class ParkActionServiceImpl implements ParkActionService {
 
 	@Override
 	public List<ParkAction> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return parkActionDAO.getAll();
 	}
 
 	@Override
-	public void update(ParkAction object) {
-		// TODO Auto-generated method stub
-
+	public void update(ParkAction parkAction) {
+		parkActionDAO.update(parkAction);
 	}
 
 	@Override
 	public void delete(Integer id) {
-		// TODO Auto-generated method stub
-
+		parkActionDAO.delete(id);
 	}
 
 	@Override
@@ -54,21 +49,13 @@ public class ParkActionServiceImpl implements ParkActionService {
 	@Override
 	public ParkAction finishParkAction(Driver driver) {
 		ParkAction toFinish = parkActionDAO.getDriverLastParkAction(driver);
-		if(toFinish == null) {
-			return null; //walnac wyjatkiem
+		if (toFinish == null) {
+			return null; // in such situtation, i could also throw some exception, but, as it is a simple
+							// app, i believe that null will also be ok (using this method I will check
+							// if null returned)
 		}
 		toFinish.setEnd(new Date());
 		save(toFinish);
 		return toFinish;
 	}
-	
-	@Override
-	public DriverCharge getChargeForADay(Date date) {
-		for(ParkAction parkAction:FakeDatabaseStub.parkActions) {
-//			parkAction
-			//parkAction.getDriver().getDriverType().get
-		}
-		return null;
-	}
-
 }
