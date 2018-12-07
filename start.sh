@@ -1,1 +1,1 @@
-java -jar target/parkingmeter-1.0.jar
+java -jar target/parkingmeter-1.0.jar 
