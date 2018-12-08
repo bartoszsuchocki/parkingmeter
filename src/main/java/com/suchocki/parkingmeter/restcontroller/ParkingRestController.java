@@ -77,26 +77,5 @@ public class ParkingRestController {
 	public List<DriverCharge> getEarning(@PathVariable("stringDate") Date date) {
 		return driverPaymentService.getPaymentsSumByday(date);
 	}
-	// ewentualnie jeszcze /earnings/date/currency
-
-	// dorobic jeszcze /charge/licensePlate
-
-//	@GetMapping("/get")
-//	public Driver get() {
-//		DriverType driverType = new DriverType("typ");
-//
-//		Currency currency = new Currency();
-//		currency.setAcronym("pln");
-//		currency.setName("zloty");
-//		ParkingCost pc = new ParkingCost(currency);
-//
-//		driverType.addCost(pc);
-//		Driver driver = new Driver();
-//
-//		driver.setDriverType(driverType);
-//		driver.setLicensePlate("wf23223");
-////		ParkAction parkAction = new ParkAction(new Date(), driver);
-//		return driver;
-//	}
 
 }

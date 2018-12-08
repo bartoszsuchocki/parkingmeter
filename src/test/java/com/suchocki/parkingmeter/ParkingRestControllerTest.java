@@ -83,8 +83,6 @@ public class ParkingRestControllerTest {
 		regularDriverAlreadyParking = new Driver("wf33333", regularType);
 		disabledDriverAlreadyParking = new Driver("wf44444", disabledType);
 
-//		parkingDisabledDriverParkAction = new ParkAction(new Date(System.get), driver)
-
 		mapper = new ObjectMapper();
 
 		try {

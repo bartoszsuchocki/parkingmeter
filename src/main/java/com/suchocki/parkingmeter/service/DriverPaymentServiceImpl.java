@@ -55,16 +55,12 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 			return null;
 		}
 
-		System.out.println(getClass().getName() + " Currencies obtained by currencySerivice: " + currencies);
-
 		/* inserting '0 values' in order to add values to them later' */
 		for (Currency currency : currencies) {
 			paymentsSums.put(currency, new BigDecimal(0D).setScale(2, RoundingMode.HALF_UP));
 		}
 
 		/* end of inserting '0 values' */
-
-		System.out.println(getClass().getName() + " Map: " + paymentsSums);
 
 		/* summing */
 		List<DriverPayment> paymentsThisDay = getByDay(date);
