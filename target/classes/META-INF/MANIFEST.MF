@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: sucha_rakzuks
+Build-Jdk: 10.0.1
+Implementation-Title: parkingmeter
+Implementation-Version: 1.0
+Implementation-Vendor-Id: com.suchocki
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/parkingmeter
+Created-By: Maven Integration for Eclipse
+
