@@ -1,2 +1,2 @@
 # parkingmeter
-Simple service for managing the city parking spaces
+Application for managing the city parking spaces.
