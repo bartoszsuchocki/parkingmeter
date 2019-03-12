@@ -1,8 +1,13 @@
 package com.suchocki.parkingmeter.dao;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
+
 import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.Driver;
 import com.suchocki.parkingmeter.entity.ParkAction;
@@ -12,23 +17,17 @@ public class ParkActionDAOImpl implements ParkActionDAO {
 
 	@Override
 	public void save(ParkAction parkAction) {
-		for (ParkAction pAction : FakeDatabaseStub.parkActions) {
-			if (pAction.getId() == parkAction.getId()) {
-				update(parkAction);
-			}
+		if (get(parkAction.getId()).isPresent()) {
+			update(parkAction);
+		} else {
+			parkAction.setId(FakeDatabaseStub.parkActions.size() + 1);
+			FakeDatabaseStub.parkActions.add(parkAction);
 		}
-		parkAction.setId(FakeDatabaseStub.parkActions.size() + 1);
-		FakeDatabaseStub.parkActions.add(parkAction);
 	}
 
 	@Override
-	public ParkAction get(Integer id) {
-		for (ParkAction parkAction : FakeDatabaseStub.parkActions) {
-			if (parkAction.getId() == id) {
-				return parkAction;
-			}
-		}
-		return null;
+	public Optional<ParkAction> get(Integer id) {
+		return FakeDatabaseStub.parkActions.stream().filter(parkAction -> parkAction.getId() == id).findFirst();
 	}
 
 	@Override
@@ -38,35 +37,23 @@ public class ParkActionDAOImpl implements ParkActionDAO {
 
 	@Override
 	public void update(ParkAction parkAction) {
-		for (ParkAction p : FakeDatabaseStub.parkActions) {
-			if (p.getId() == parkAction.getId()) {
-				p.updateProperties(parkAction);
-			}
-		}
-
+		Predicate<ParkAction> predicate = pAction -> pAction.getId() == parkAction.getId();
+		Optional<ParkAction> toUpdate = FakeDatabaseStub.parkActions.stream().filter(predicate).findFirst();
+		toUpdate.ifPresent(pAction -> pAction.updateProperties(parkAction));
 	}
 
 	@Override
 	public void delete(Integer id) {
-		int counter = 0;
-		for (ParkAction parkAction : FakeDatabaseStub.parkActions) {
-			if (parkAction.getId() == id) {
-				break;
-			}
-			counter++;
-		}
-		FakeDatabaseStub.currencies.remove(counter);
+		FakeDatabaseStub.parkActions.removeIf(parkAction -> parkAction.getId() == id);
 	}
 
 	@Override
-	public ParkAction getDriverLastParkAction(Driver driver) {
-		ParkAction lastParkAction = null;
-		for (ParkAction parkAction : FakeDatabaseStub.parkActions) {
-			if (parkAction.getDriver().equals(driver)) {
-				lastParkAction = parkAction;
-			}
-		}
-		return lastParkAction;
+	public Optional<ParkAction> getDriverLastParkAction(Driver driver) {
+		Predicate<ParkAction> predicate = parkAction -> parkAction.getDriver().equals(driver);
+		Comparator<ParkAction> byDateComparator = (ParkAction p1, ParkAction p2) -> {
+			return (int) (p1.getStart().getTime() - p2.getStart().getTime());
+		};
+		return FakeDatabaseStub.parkActions.stream().filter(predicate).collect(Collectors.maxBy(byDateComparator));
 	}
 
 }

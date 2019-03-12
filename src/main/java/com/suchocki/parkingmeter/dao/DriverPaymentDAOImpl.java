@@ -1,10 +1,14 @@
 package com.suchocki.parkingmeter.dao;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Repository;
+
 import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.DriverPayment;
 
@@ -19,13 +23,9 @@ public class DriverPaymentDAOImpl implements DriverPaymentDAO {
 	}
 
 	@Override
-	public DriverPayment get(int id) {
-		for (DriverPayment driverPayment : FakeDatabaseStub.driverPayments) {
-			if (driverPayment.getId() == id) {
-				return driverPayment;
-			}
-		}
-		return null;
+	public Optional<DriverPayment> get(int id) {
+		Predicate<DriverPayment> predicate = payment -> payment.getId() == id;
+		return FakeDatabaseStub.driverPayments.stream().filter(predicate).findFirst();
 	}
 
 	@Override
@@ -35,14 +35,8 @@ public class DriverPaymentDAOImpl implements DriverPaymentDAO {
 
 	@Override
 	public List<DriverPayment> getByDay(Date date) {
-
-		List<DriverPayment> resultList = new ArrayList<>();
-		for (DriverPayment payment : FakeDatabaseStub.driverPayments) {
-			if (datesEqualByDay(date, payment.getPayDate())) {
-				resultList.add(payment);
-			}
-		}
-		return resultList;
+		Predicate<DriverPayment> predicate = payment -> datesEqualByDay(payment.getPayDate(), date);
+		return FakeDatabaseStub.driverPayments.stream().filter(predicate).collect(Collectors.toList());
 	}
 
 	private boolean datesEqualByDay(Date date1, Date date2) {

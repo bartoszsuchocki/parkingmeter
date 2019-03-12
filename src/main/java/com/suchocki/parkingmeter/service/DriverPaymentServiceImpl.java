@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 	}
 
 	@Override
-	public DriverPayment get(int id) {
+	public Optional<DriverPayment> get(int id) {
 		return driverPaymentDAO.get(id);
 	}
 
@@ -48,40 +50,56 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 	@Override
 	public List<DriverCharge> getPaymentsSumByday(Date date) {
 
-		Map<Currency, BigDecimal> paymentsSums = new LinkedHashMap<>(); // payments sums in different currencies
-		List<Currency> currencies = currencyService.getAll();
-
-		if (currencies == null) {
-			return null;
-		}
-
-		/* inserting '0 values' in order to add values to them later' */
-		for (Currency currency : currencies) {
-			paymentsSums.put(currency, new BigDecimal(0D).setScale(2, RoundingMode.HALF_UP));
-		}
-
-		/* end of inserting '0 values' */
-
-		/* summing */
 		List<DriverPayment> paymentsThisDay = getByDay(date);
-		for (DriverPayment payment : paymentsThisDay) {
-			if (payment.getCurrency() == null) {
-				continue;
-			}
-			BigDecimal fee = paymentsSums.get(payment.getCurrency());
-			paymentsSums.replace(payment.getCurrency(), fee.add(payment.getFee()).setScale(2, RoundingMode.HALF_UP));
-
-		}
-		/* end of summing */
-
+		List<Currency> currencies = currencyService.getAll();
 		List<DriverCharge> resultList = new ArrayList<>();
 
-		/* converting sum map to list */
-		for (Currency currency : paymentsSums.keySet()) {
-			resultList.add(new DriverCharge(currency, paymentsSums.get(currency)));
+		for (Currency c : currencies) {
+			Predicate<DriverPayment> properCurrencyPredicate = driverPayment -> driverPayment.getCurrency() != null
+							&& driverPayment.getCurrency().equals(c);
+			BigDecimal fee = paymentsThisDay.stream().filter(properCurrencyPredicate).map(DriverPayment::getFee)
+							.reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
+			resultList.add(new DriverCharge(c, fee));
 		}
-		/* end of converting sum map to list */
 
 		return resultList;
+		
+		
+		
+//		Map<Currency, BigDecimal> paymentsSums = new LinkedHashMap<>(); // payments sums in different currencies
+//		List<Currency> currencies = currencyService.getAll();
+//
+//		if (currencies == null) {
+//			return null;
+//		}
+//
+//		/* inserting '0 values' in order to add values to them later' */
+//		for (Currency currency : currencies) {
+//			paymentsSums.put(currency, new BigDecimal(0D).setScale(2, RoundingMode.HALF_UP));
+//		}
+//
+//		/* end of inserting '0 values' */
+//
+//		/* summing */
+//		List<DriverPayment> paymentsThisDay = getByDay(date);
+//		for (DriverPayment payment : paymentsThisDay) {
+//			if (payment.getCurrency() == null) {
+//				continue;
+//			}
+//			BigDecimal fee = paymentsSums.get(payment.getCurrency());
+//			paymentsSums.replace(payment.getCurrency(), fee.add(payment.getFee()).setScale(2, RoundingMode.HALF_UP));
+//
+//		}
+//		/* end of summing */
+//
+//		List<DriverCharge> resultList = new ArrayList<>();
+//
+//		/* converting sum map to list */
+//		for (Currency currency : paymentsSums.keySet()) {
+//			resultList.add(new DriverCharge(currency, paymentsSums.get(currency)));
+//		}
+//		/* end of converting sum map to list */
+//
+//		return resultList;
 	}
 }

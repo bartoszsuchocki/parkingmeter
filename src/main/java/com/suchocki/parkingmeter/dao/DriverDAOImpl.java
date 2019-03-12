@@ -1,6 +1,8 @@
 package com.suchocki.parkingmeter.dao;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.springframework.stereotype.Repository;
 
@@ -12,17 +14,17 @@ public class DriverDAOImpl implements DriverDAO {
 
 	@Override
 	public void save(Driver driver) {
-		FakeDatabaseStub.drivers.add(driver);
+		if(get(driver.getLicensePlate()).isPresent()) {
+			update(driver);
+		}
+		else{
+			FakeDatabaseStub.drivers.add(driver);
+		}
 	}
 
 	@Override
-	public Driver get(String id) {
-		for (Driver d : FakeDatabaseStub.drivers) {
-			if (d.getLicensePlate().equals(id)) {
-				return d;
-			}
-		}
-		return null;
+	public Optional<Driver> get(String id) {
+		return FakeDatabaseStub.drivers.stream().filter(driver -> driver.getLicensePlate().equals(id)).findFirst();
 	}
 
 	@Override
@@ -32,23 +34,14 @@ public class DriverDAOImpl implements DriverDAO {
 
 	@Override
 	public void update(Driver driver) {
-		for (Driver d : FakeDatabaseStub.drivers) {
-			if (d.getLicensePlate().equals(driver.getLicensePlate())) {
-				d.updateProperties(driver);
-			}
-		}
+		Predicate<Driver> predicate = d -> driver.getLicensePlate().equals(d.getLicensePlate());
+		Optional<Driver> toUpdate = FakeDatabaseStub.drivers.stream().filter(predicate).findFirst();
+		toUpdate.ifPresent(d -> d.updateProperties(driver));
 	}
 
 	@Override
 	public void delete(String licensePlate) {
-		int counter = 0;
-		for (Driver d : FakeDatabaseStub.drivers) {
-			if (d.getLicensePlate().equals(licensePlate)) {
-				break;
-			}
-			counter++;
-		}
-		FakeDatabaseStub.drivers.remove(counter);
+		FakeDatabaseStub.drivers.removeIf(d -> d.getLicensePlate().equals(licensePlate));
 	}
 
 }

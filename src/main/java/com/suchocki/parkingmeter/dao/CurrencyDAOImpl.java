@@ -1,6 +1,8 @@
 package com.suchocki.parkingmeter.dao;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.springframework.stereotype.Repository;
 
@@ -12,21 +14,16 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 
 	@Override
 	public void save(Currency currency) {
-		if (get(currency.getAcronym()) == null) {
-			FakeDatabaseStub.currencies.add(currency);
-		} else {
+		if (get(currency.getAcronym()).isPresent()) {
 			update(currency);
+		} else {
+			FakeDatabaseStub.currencies.add(currency);
 		}
 	}
 
 	@Override
-	public Currency get(String id) {
-		for (Currency c : FakeDatabaseStub.currencies) {
-			if (c.getAcronym().equals(id)) {
-				return c;
-			}
-		}
-		return null;
+	public Optional<Currency> get(String id) {
+		return FakeDatabaseStub.currencies.stream().filter(currency -> currency.getAcronym().equals(id)).findFirst();
 	}
 
 	@Override
@@ -36,23 +33,14 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 
 	@Override
 	public void update(Currency currency) {
-		for (Currency c : FakeDatabaseStub.currencies) {
-			if (c.getAcronym().equals(currency.getAcronym())) {
-				c.updateProperties(currency);
-			}
-		}
+		Predicate<Currency> predicate = (currencyItem) -> (currencyItem.getAcronym().equals(currency.getAcronym()));
+		Optional<Currency> currencyToUpdate = FakeDatabaseStub.currencies.stream().filter(predicate).findFirst();
+		currencyToUpdate.ifPresent(toUpdate -> toUpdate.updateProperties(currency));
 	}
 
 	@Override
 	public void delete(String id) {
-		int counter = 0;
-		for (Currency currency : FakeDatabaseStub.currencies) {
-			if (currency.getAcronym().equals(id)) {
-				break;
-			}
-			counter++;
-		}
-		FakeDatabaseStub.currencies.remove(counter);
+		FakeDatabaseStub.currencies.removeIf(currency -> currency.getAcronym().equals(id));
 	}
 
 }

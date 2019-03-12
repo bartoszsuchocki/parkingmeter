@@ -2,6 +2,7 @@ package com.suchocki.parkingmeter.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.suchocki.parkingmeter.dao.ParkActionDAO;
 import com.suchocki.parkingmeter.entity.Driver;
 import com.suchocki.parkingmeter.entity.ParkAction;
+import com.suchocki.parkingmeter.exception.NoParkActionStartedException;
 
 @Service
 public class ParkActionServiceImpl implements ParkActionService {
@@ -22,7 +24,7 @@ public class ParkActionServiceImpl implements ParkActionService {
 	}
 
 	@Override
-	public ParkAction get(Integer id) {
+	public Optional<ParkAction> get(Integer id) {
 		return parkActionDAO.get(id);
 	}
 
@@ -42,20 +44,12 @@ public class ParkActionServiceImpl implements ParkActionService {
 	}
 
 	@Override
-	public ParkAction getDriverLastParkAction(Driver driver) {
+	public Optional<ParkAction> getDriverLastParkAction(Driver driver) {
 		return parkActionDAO.getDriverLastParkAction(driver);
 	}
 
 	@Override
-	public ParkAction finishParkAction(Driver driver) {
-		ParkAction toFinish = parkActionDAO.getDriverLastParkAction(driver);
-		if (toFinish == null) {
-			return null; // in such situtation, i could also throw some exception, but, as it is a simple
-							// app, i believe that null will also be ok (using this method I will check
-							// if null returned)
-		}
-		toFinish.setEnd(new Date());
-		save(toFinish);
-		return toFinish;
+	public Optional<ParkAction> finishParkAction(Driver driver) {
+		return parkActionDAO.getDriverLastParkAction(driver);
 	}
 }

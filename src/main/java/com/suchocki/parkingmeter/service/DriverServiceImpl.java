@@ -1,7 +1,9 @@
 package com.suchocki.parkingmeter.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import com.suchocki.parkingmeter.entity.Driver;
 import com.suchocki.parkingmeter.entity.DriverCharge;
 import com.suchocki.parkingmeter.entity.DriverPayment;
 import com.suchocki.parkingmeter.entity.ParkAction;
+import com.suchocki.parkingmeter.exception.NoParkActionStartedException;
 
 @Service
 public class DriverServiceImpl implements DriverService {
@@ -35,18 +38,22 @@ public class DriverServiceImpl implements DriverService {
 	}
 
 	@Override
-	public ParkAction stopParkingMeter(Driver driver) {
-		return parkActionService.finishParkAction(driver);
+	public ParkAction stopParkingMeter(Driver driver) throws NoParkActionStartedException {
+		Optional<ParkAction> finished = parkActionService.finishParkAction(driver);
+		if (!finished.isPresent()) {
+			throw new NoParkActionStartedException();
+		}
+		return finished.get();
 	}
 
 	@Override
 	public boolean startedParkingMeter(String licensePlate) {
-		Driver driver = driverDAO.get(licensePlate);
-		if (driver == null) {
+		Optional<Driver> driver = driverDAO.get(licensePlate);
+		if (!driver.isPresent()) {
 			return false;
 		}
-		ParkAction lastParkAction = parkActionService.getDriverLastParkAction(driver);
-		if (lastParkAction != null && lastParkAction.getEnd() == null) {
+		Optional<ParkAction> lastParkAction = parkActionService.getDriverLastParkAction(driver.get());
+		if (lastParkAction.isPresent() && lastParkAction.get().getEnd() == null) {
 			return true;
 		}
 		return false;
@@ -54,17 +61,17 @@ public class DriverServiceImpl implements DriverService {
 
 	@Override
 	public List<DriverCharge> checkChargeForParkingTillNow(Driver driver) {
-		ParkAction lastParkAction = parkActionService.getDriverLastParkAction(driver);
-		if (lastParkAction == null) {
-			return null;
+		Optional<ParkAction> lastParkAction = parkActionService.getDriverLastParkAction(driver);
+		if (!lastParkAction.isPresent()) {
+			return new ArrayList<DriverCharge>(); // empty list
 		}
-		return lastParkAction.calculateCharges();
+		return lastParkAction.get().calculateCharges();
 	}
 
 	@Override
 	public List<DriverCharge> checkChargeForParkingTillNow(String licensePlate) {
 
-		Driver driver = driverDAO.get(licensePlate);
+		Driver driver = driverDAO.get(licensePlate).orElse(null);
 		if (driver == null) {
 			return null;
 		}

@@ -1,6 +1,7 @@
 package com.suchocki.parkingmeter.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	}
 
 	@Override
-	public Currency get(String id) {
+	public Optional<Currency> get(String id) {
 		return currencyDAO.get(id);
 	}
 
