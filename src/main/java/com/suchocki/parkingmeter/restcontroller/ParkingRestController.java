@@ -18,6 +18,7 @@ import com.suchocki.parkingmeter.entity.Driver;
 import com.suchocki.parkingmeter.entity.DriverCharge;
 import com.suchocki.parkingmeter.entity.DriverPayment;
 import com.suchocki.parkingmeter.entity.ParkAction;
+import com.suchocki.parkingmeter.exception.NoParkActionStartedException;
 import com.suchocki.parkingmeter.propertyeditor.DatePropertyEditor;
 import com.suchocki.parkingmeter.service.DriverPaymentService;
 import com.suchocki.parkingmeter.service.DriverService;
@@ -43,13 +44,8 @@ public class ParkingRestController {
 	}
 
 	@PutMapping("/stop")
-	public List<DriverCharge> stop(@RequestBody Driver driver) {
-
+	public List<DriverCharge> stop(@RequestBody Driver driver) throws NoParkActionStartedException {
 		ParkAction finishedParkAction = driverService.stopParkingMeter(driver);
-		if (finishedParkAction == null) {
-			return null; // zastanowić się nad tym!
-		}
-
 		return finishedParkAction.calculateCharges();
 	}
 
