@@ -13,7 +13,6 @@ public class ParkAction {
 	private Driver driver;
 
 	public ParkAction() {
-
 	}
 
 	public ParkAction(Date start, Driver driver) {

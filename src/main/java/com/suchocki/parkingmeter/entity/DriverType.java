@@ -9,7 +9,6 @@ public class DriverType {
 	private List<ParkingCost> costs; // costs will store parking costs in different currencies
 
 	public DriverType() {
-		;
 	}
 
 	public DriverType(String name) {

@@ -8,7 +8,6 @@ public class DriverCharge {
 	protected BigDecimal fee;
 
 	public DriverCharge() {
-		;
 	}
 
 	public DriverCharge(Currency currency, BigDecimal fee) {

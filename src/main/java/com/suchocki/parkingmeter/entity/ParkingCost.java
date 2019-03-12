@@ -10,7 +10,6 @@ public class ParkingCost {
 	private Double overTwoHoursMultiplier;
 
 	public ParkingCost() {
-		;
 	}
 
 	public ParkingCost(Currency currency) {

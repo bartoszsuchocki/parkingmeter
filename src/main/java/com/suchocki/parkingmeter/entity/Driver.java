@@ -5,7 +5,6 @@ public class Driver {
 	private DriverType driverType;
 
 	public Driver() {
-		;
 	}
 
 	public Driver(String licensePlate, DriverType driverType) {

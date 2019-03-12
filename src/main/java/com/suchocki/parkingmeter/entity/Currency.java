@@ -5,7 +5,6 @@ public class Currency {
 	private String acronym; // this will be primary key in database;
 
 	public Currency() {
-
 	}
 
 	public Currency(String name, String acronym) {

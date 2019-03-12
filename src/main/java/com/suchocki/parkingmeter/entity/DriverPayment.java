@@ -9,7 +9,6 @@ public class DriverPayment extends DriverCharge {
 	private Driver driver;
 
 	public DriverPayment() {
-		;
 	}
 
 	public DriverPayment(Currency currency, BigDecimal fee) {
