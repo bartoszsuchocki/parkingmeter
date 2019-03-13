@@ -2,14 +2,15 @@ package com.suchocki.parkingmeter;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.junit.Before;
@@ -380,8 +381,9 @@ public class ParkingRestControllerTest {
 	/*------------calculating earnings for given day------------*/
 	@Test
 	public void shouldReturnEarningsInPLNForTodayAfterAddingSeveralPaymentsToDatabase() {
-		Date now = new Date();
-		Date oneDayAgo = new Date(System.currentTimeMillis() - 24 * 3600 * 1000);
+		LocalDateTime now = LocalDateTime.now();
+//		Date oneDayAgo = new Date(System.currentTimeMillis() - 24 * 3600 * 1000);
+		LocalDateTime oneDayAgo = now.minusDays(1);
 		FakeDatabaseStub.driverPayments.add(new DriverPayment(plnCurrency, new BigDecimal(3.00), now, regularDriver));
 		FakeDatabaseStub.driverPayments.add(new DriverPayment(plnCurrency, new BigDecimal(5.00), now, regularDriver));
 		FakeDatabaseStub.driverPayments.add(new DriverPayment(plnCurrency, new BigDecimal(7.45), now, regularDriver));
@@ -390,9 +392,9 @@ public class ParkingRestControllerTest {
 
 		FakeDatabaseStub.printDB();
 
-		String stringDateNow = new SimpleDateFormat("yyyy-MM-dd").format(now);
+		String stringDateNowWithoutTime = now.toLocalDate().toString();// new SimpleDateFormat("yyyy-MM-dd").format(now);
 		try {
-			mvc.perform(get("/api/earnings/" + stringDateNow)).andExpect(status().isOk())
+			mvc.perform(get("/api/earnings/" + stringDateNowWithoutTime)).andExpect(status().isOk())
 					.andExpect(jsonPath("$[0].fee", is(15.45)));
 		} catch (Exception e) {
 			e.printStackTrace();

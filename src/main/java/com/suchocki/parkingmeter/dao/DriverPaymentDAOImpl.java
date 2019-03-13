@@ -1,6 +1,7 @@
 package com.suchocki.parkingmeter.dao;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class DriverPaymentDAOImpl implements DriverPaymentDAO {
 
 	@Override
 	public void save(DriverPayment driverPayment) {
-		driverPayment.setPayDate(new Date());
+		driverPayment.setPayDate(LocalDateTime.now());
 		driverPayment.setId(FakeDatabaseStub.driverPayments.size() + 1);
 		FakeDatabaseStub.driverPayments.add(driverPayment);
 	}
@@ -34,23 +35,9 @@ public class DriverPaymentDAOImpl implements DriverPaymentDAO {
 	}
 
 	@Override
-	public List<DriverPayment> getByDay(Date date) {
-		Predicate<DriverPayment> predicate = payment -> datesEqualByDay(payment.getPayDate(), date);
+	public List<DriverPayment> getByDay(LocalDate date) {
+		Predicate<DriverPayment> predicate = payment -> payment.getPayDate().toLocalDate().equals(date);
 		return FakeDatabaseStub.driverPayments.stream().filter(predicate).collect(Collectors.toList());
-	}
-
-	private boolean datesEqualByDay(Date date1, Date date2) {
-		return getDateWithoutTimePart(date1).equals(getDateWithoutTimePart(date2));
-	}
-
-	private Date getDateWithoutTimePart(Date date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-		return calendar.getTime();
 	}
 
 }

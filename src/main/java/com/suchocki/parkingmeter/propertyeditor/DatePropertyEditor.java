@@ -1,31 +1,26 @@
 package com.suchocki.parkingmeter.propertyeditor;
 
 import java.beans.PropertyEditorSupport;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class DatePropertyEditor extends PropertyEditorSupport {
 
-	SimpleDateFormat dateFormat;
+	private DateTimeFormatter dateFormatter;
 
 	public DatePropertyEditor() {
-		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	}
 
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
-		try {
-			Date date = dateFormat.parse(text);
-			this.setValue(date);
-		} catch (ParseException e) {
-			this.setValue(null);
-		}
+		LocalDate date = LocalDate.parse(text, dateFormatter);
+		this.setValue(date);
 	}
 
 	@Override
 	public String getAsText() {
-		Date date = (Date) this.getValue();
-		return dateFormat.format(date);
+		LocalDate date = (LocalDate) this.getValue();
+		return date.toString();
 	}
 }

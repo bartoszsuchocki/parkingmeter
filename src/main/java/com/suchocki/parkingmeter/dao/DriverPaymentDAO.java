@@ -1,6 +1,6 @@
 package com.suchocki.parkingmeter.dao;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,5 +13,5 @@ public interface DriverPaymentDAO { // not extending DAO, because payments shoul
 
 	public List<DriverPayment> getAll();
 
-	public List<DriverPayment> getByDay(Date date);
+	public List<DriverPayment> getByDay(LocalDate date);
 }

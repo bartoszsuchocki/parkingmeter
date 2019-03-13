@@ -1,11 +1,11 @@
 package com.suchocki.parkingmeter.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class DriverPayment extends DriverCharge {
 	private int id;
-	private Date payDate;
+	private LocalDateTime payDate;
 	private Driver driver;
 
 	public DriverPayment() {
@@ -15,7 +15,7 @@ public class DriverPayment extends DriverCharge {
 		super(currency, fee);
 	}
 
-	public DriverPayment(Currency currency, BigDecimal fee, Date payDate, Driver driver) {
+	public DriverPayment(Currency currency, BigDecimal fee, LocalDateTime payDate, Driver driver) {
 		super(currency, fee);
 		this.payDate = payDate;
 		this.driver = driver;
@@ -29,11 +29,11 @@ public class DriverPayment extends DriverCharge {
 		this.id = id;
 	}
 
-	public Date getPayDate() {
+	public LocalDateTime getPayDate() {
 		return payDate;
 	}
 
-	public void setPayDate(Date payDate) {
+	public void setPayDate(LocalDateTime payDate) {
 		this.payDate = payDate;
 	}
 

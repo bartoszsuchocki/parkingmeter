@@ -1,5 +1,6 @@
 package com.suchocki.parkingmeter.restcontroller;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class ParkingRestController {
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		binder.registerCustomEditor(Date.class, new DatePropertyEditor());
+		binder.registerCustomEditor(LocalDate.class, new DatePropertyEditor());
 	}
 
 	@PostMapping("/start")
@@ -70,7 +71,7 @@ public class ParkingRestController {
 	}
 
 	@GetMapping("/earnings/{stringDate}") // date should be in this format: yyyy-mm-dd
-	public List<DriverCharge> getEarning(@PathVariable("stringDate") Date date) {
+	public List<DriverCharge> getEarning(@PathVariable("stringDate") LocalDate date) {
 		return driverPaymentService.getPaymentsSumByday(date);
 	}
 

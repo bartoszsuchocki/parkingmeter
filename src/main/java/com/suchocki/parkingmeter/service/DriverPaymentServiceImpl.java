@@ -2,11 +2,9 @@ package com.suchocki.parkingmeter.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -43,12 +41,12 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 	}
 
 	@Override
-	public List<DriverPayment> getByDay(Date date) {
+	public List<DriverPayment> getByDay(LocalDate date) {
 		return driverPaymentDAO.getByDay(date);
 	}
 
 	@Override
-	public List<DriverCharge> getPaymentsSumByday(Date date) {
+	public List<DriverCharge> getPaymentsSumByday(LocalDate date) {
 
 		List<DriverPayment> paymentsThisDay = getByDay(date);
 		List<Currency> currencies = currencyService.getAll();
@@ -56,16 +54,14 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 
 		for (Currency c : currencies) {
 			Predicate<DriverPayment> properCurrencyPredicate = driverPayment -> driverPayment.getCurrency() != null
-							&& driverPayment.getCurrency().equals(c);
+					&& driverPayment.getCurrency().equals(c);
 			BigDecimal fee = paymentsThisDay.stream().filter(properCurrencyPredicate).map(DriverPayment::getFee)
-							.reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
+					.reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
 			resultList.add(new DriverCharge(c, fee));
 		}
 
 		return resultList;
-		
-		
-		
+
 //		Map<Currency, BigDecimal> paymentsSums = new LinkedHashMap<>(); // payments sums in different currencies
 //		List<Currency> currencies = currencyService.getAll();
 //
