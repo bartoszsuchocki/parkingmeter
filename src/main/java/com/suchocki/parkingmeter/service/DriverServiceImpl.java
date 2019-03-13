@@ -1,5 +1,6 @@
 package com.suchocki.parkingmeter.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +33,7 @@ public class DriverServiceImpl implements DriverService {
 		if (!existsInDb(driver)) {
 			driverDAO.save(driver);
 		}
-		ParkAction parkAction = new ParkAction(new Date(), driver);
+		ParkAction parkAction = new ParkAction(LocalDateTime.now(), driver);
 		parkActionService.save(parkAction);
 		return parkAction;
 	}

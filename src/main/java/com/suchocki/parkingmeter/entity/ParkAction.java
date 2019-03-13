@@ -2,36 +2,29 @@ package com.suchocki.parkingmeter.entity;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class ParkAction {
 	private int id; // this will be primary key in database
-	private Date start;
-	private Date end;
+	private LocalDateTime start;
+	private LocalDateTime end;
 	private Driver driver;
 
 	public ParkAction() {
 	}
 
-	public ParkAction(Date start, Driver driver) {
+	public ParkAction(LocalDateTime start, Driver driver) {
 		this.start = start;
 		this.driver = driver;
 	}
 
 	private BigDecimal calculateFee(ParkingCost parkingCost) {
-		int hoursToPayFor;
 
-		/* calculating number of hours to pay for */
-		long differenceInMilis;
-		if (end != null) {
-			differenceInMilis = end.getTime() - start.getTime();
-		} else {
-			differenceInMilis = System.currentTimeMillis() - start.getTime();
-		}
-		hoursToPayFor = (int) Math.ceil(differenceInMilis / 3600000D);
-		/* end of calculating number of hours to pay for */
+		int hoursToPayFor = hoursToPayFor();
 
 		/* calculating the cost */
 		double fee = 0;
@@ -58,6 +51,19 @@ public class ParkAction {
 		return finalFee;
 	}
 
+	private int hoursToPayFor() {
+		
+		LocalDateTime endBoundary = (end!=null)?end:LocalDateTime.now();
+		long months = start.until(endBoundary, ChronoUnit.MONTHS);
+		long days = start.until(endBoundary, ChronoUnit.DAYS);
+		long hours = start.until(endBoundary, ChronoUnit.HOURS);
+		long minutes = start.until(endBoundary, ChronoUnit.MINUTES);
+		
+		int result = (int) (months*30*24 + days*24 + hours + ((minutes > 0)?1:0));
+		
+		return result;
+	}
+
 	public List<DriverCharge> calculateCharges() {
 		List<DriverCharge> charges = new ArrayList<>();
 		for (ParkingCost parkingCost : driver.getDriverType().getCosts()) {
@@ -81,19 +87,19 @@ public class ParkAction {
 		this.id = id;
 	}
 
-	public Date getStart() {
+	public LocalDateTime getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(LocalDateTime start) {
 		this.start = start;
 	}
 
-	public Date getEnd() {
+	public LocalDateTime getEnd() {
 		return end;
 	}
 
-	public void setEnd(Date end) {
+	public void setEnd(LocalDateTime end) {
 		this.end = end;
 	}
 

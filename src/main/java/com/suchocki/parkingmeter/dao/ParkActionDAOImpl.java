@@ -51,7 +51,7 @@ public class ParkActionDAOImpl implements ParkActionDAO {
 	public Optional<ParkAction> getDriverLastParkAction(Driver driver) {
 		Predicate<ParkAction> predicate = parkAction -> parkAction.getDriver().equals(driver);
 		Comparator<ParkAction> byDateComparator = (ParkAction p1, ParkAction p2) -> {
-			return (int) (p1.getStart().getTime() - p2.getStart().getTime());
+			return (p1.getStart().isBefore(p2.getStart()) ? -1 : 1);
 		};
 		return FakeDatabaseStub.parkActions.stream().filter(predicate).collect(Collectors.maxBy(byDateComparator));
 	}

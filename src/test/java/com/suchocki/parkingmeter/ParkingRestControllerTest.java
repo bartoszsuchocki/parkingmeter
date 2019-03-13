@@ -9,9 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -142,7 +140,7 @@ public class ParkingRestControllerTest {
 	/*------------stopping parking meter------------*/
 	@Test
 	public void shouldStopParkingMeterRegularDriver() {
-		Date threeHoursAgo = new Date(System.currentTimeMillis() - 3 * 3600 * 1000);
+		LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(3);
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAgo, regularDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
 
@@ -158,7 +156,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldStopParkingMeterDisabledDriver() {
-		Date threeHoursAgo = new Date(System.currentTimeMillis() - 3 * 3600 * 1000);
+		LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(3);
 		parkingDisabledDriverParkAction = new ParkAction(threeHoursAgo, disabledDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
 
@@ -187,7 +185,7 @@ public class ParkingRestControllerTest {
 	@Test
 	public void shouldReturnTrueCheckingIfDriverStartedParkingmeter() {
 
-		Date threeHoursAgo = new Date(System.currentTimeMillis() - 3 * 3600 * 1000);
+		LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(3);
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAgo, regularDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
 
@@ -203,7 +201,7 @@ public class ParkingRestControllerTest {
 	/*------------calculating charges------------*/
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow4hoursForRegularDriver() {
-		Date threeHoursAnd20MinutesAgo = new Date(System.currentTimeMillis() - (3 * 3600 + 20 * 60) * 1000);
+		LocalDateTime threeHoursAnd20MinutesAgo = LocalDateTime.now().minusHours(3).minusMinutes(20);
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAnd20MinutesAgo, regularDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
 
@@ -217,7 +215,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow2hoursForRegularDriver() {
-		Date oneHourAnd30MinutesAgo = new Date(System.currentTimeMillis() - (1 * 3600 + 30 * 60) * 1000);
+		LocalDateTime oneHourAnd30MinutesAgo = LocalDateTime.now().minusHours(1).minusMinutes(30);
 		parkingRegularDriverParkAction = new ParkAction(oneHourAnd30MinutesAgo, regularDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
 
@@ -231,7 +229,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow1hourForRegularDriver() {
-		Date fiftyNineMinutesAgo = new Date(System.currentTimeMillis() - 59 * 60 * 1000);
+		LocalDateTime fiftyNineMinutesAgo = LocalDateTime.now().minusMinutes(59);
 		parkingRegularDriverParkAction = new ParkAction(fiftyNineMinutesAgo, regularDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
 
@@ -245,7 +243,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow4hoursForDisabledDriver() {
-		Date threeHoursAnd20MinutesAgo = new Date(System.currentTimeMillis() - (3 * 3600 + 20 * 60) * 1000);
+		LocalDateTime threeHoursAnd20MinutesAgo = LocalDateTime.now().minusHours(3).minusMinutes(20);
 		parkingDisabledDriverParkAction = new ParkAction(threeHoursAnd20MinutesAgo, disabledDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
 
@@ -259,7 +257,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow2hoursForDisabledDriver() {
-		Date oneHourAnd30MinutesAgo = new Date(System.currentTimeMillis() - (1 * 3600 + 30 * 60) * 1000);
+		LocalDateTime oneHourAnd30MinutesAgo = LocalDateTime.now().minusHours(1).minusMinutes(30);
 		parkingDisabledDriverParkAction = new ParkAction(oneHourAnd30MinutesAgo, disabledDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
 
@@ -273,7 +271,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow1hourForDisabledDriver() {
-		Date ThirtyMinutesAgo = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
+		LocalDateTime ThirtyMinutesAgo = LocalDateTime.now().minusMinutes(30);
 		parkingDisabledDriverParkAction = new ParkAction(ThirtyMinutesAgo, disabledDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
 
@@ -289,7 +287,7 @@ public class ParkingRestControllerTest {
 	/*------------calculating charges by driver JSON object------------*/
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow4hoursForRegularDriverByJSON() {
-		Date threeHoursAnd20MinutesAgo = new Date(System.currentTimeMillis() - (3 * 3600 + 20 * 60) * 1000);
+		LocalDateTime threeHoursAnd20MinutesAgo = LocalDateTime.now().minusHours(3).minusMinutes(20);
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAnd20MinutesAgo, regularDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
 
@@ -304,7 +302,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow2hoursForRegularDriverByJSON() {
-		Date oneHourAnd30MinutesAgo = new Date(System.currentTimeMillis() - (1 * 3600 + 30 * 60) * 1000);
+		LocalDateTime oneHourAnd30MinutesAgo = LocalDateTime.now().minusHours(1).minusMinutes(30);
 		parkingRegularDriverParkAction = new ParkAction(oneHourAnd30MinutesAgo, regularDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
 
@@ -319,7 +317,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow1hourForRegularDriverByJSON() {
-		Date fiftyNineMinutesAgo = new Date(System.currentTimeMillis() - 59 * 60 * 1000);
+		LocalDateTime fiftyNineMinutesAgo = LocalDateTime.now().minusMinutes(59);
 		parkingRegularDriverParkAction = new ParkAction(fiftyNineMinutesAgo, regularDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
 
@@ -334,7 +332,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow4hoursForDisabledDriverByJSON() {
-		Date threeHoursAnd20MinutesAgo = new Date(System.currentTimeMillis() - (3 * 3600 + 20 * 60) * 1000);
+		LocalDateTime threeHoursAnd20MinutesAgo = LocalDateTime.now().minusHours(3).minusMinutes(20);
 		parkingDisabledDriverParkAction = new ParkAction(threeHoursAnd20MinutesAgo, disabledDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
 
@@ -349,7 +347,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow2hoursForDisabledDriverByJSON() {
-		Date oneHourAnd30MinutesAgo = new Date(System.currentTimeMillis() - (1 * 3600 + 30 * 60) * 1000);
+		LocalDateTime oneHourAnd30MinutesAgo = LocalDateTime.now().minusHours(1).minusMinutes(30);
 		parkingDisabledDriverParkAction = new ParkAction(oneHourAnd30MinutesAgo, disabledDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
 
@@ -364,7 +362,7 @@ public class ParkingRestControllerTest {
 
 	@Test
 	public void shouldReturnDriverChargeForParkingTillNow1hourForDisabledDriverByJSON() {
-		Date ThirtyMinutesAgo = new Date(System.currentTimeMillis() - 30 * 60 * 1000);
+		LocalDateTime ThirtyMinutesAgo = LocalDateTime.now().minusMinutes(30);
 		parkingDisabledDriverParkAction = new ParkAction(ThirtyMinutesAgo, disabledDriverAlreadyParking);
 		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
 
@@ -392,7 +390,8 @@ public class ParkingRestControllerTest {
 
 		FakeDatabaseStub.printDB();
 
-		String stringDateNowWithoutTime = now.toLocalDate().toString();// new SimpleDateFormat("yyyy-MM-dd").format(now);
+		String stringDateNowWithoutTime = now.toLocalDate().toString();// new
+																		// SimpleDateFormat("yyyy-MM-dd").format(now);
 		try {
 			mvc.perform(get("/api/earnings/" + stringDateNowWithoutTime)).andExpect(status().isOk())
 					.andExpect(jsonPath("$[0].fee", is(15.45)));
