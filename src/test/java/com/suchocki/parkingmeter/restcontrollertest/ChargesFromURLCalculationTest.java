@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.suchocki.parkingmeter.ParkingmeterApplication;
-import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.ParkAction;
 
 @RunWith(SpringRunner.class)
