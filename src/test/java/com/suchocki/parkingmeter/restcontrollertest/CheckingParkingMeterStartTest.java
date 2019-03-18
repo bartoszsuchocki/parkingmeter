@@ -22,20 +22,38 @@ public class CheckingParkingMeterStartTest extends ParkingRestControllerTest {
 	private ParkAction parkingDisabledDriverParkAction;
 
 	@Test
-	public void shouldReturnFalseCheckingIfDriverStartedParkingmeter() throws Exception {
+	public void shouldReturnFalseCheckingIfRegularDriverStartedParkingmeter() throws Exception {
 
 		mvc.perform(get("/api/check/" + regularDriver.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(content().string("false"));
 	}
 
 	@Test
-	public void shouldReturnTrueCheckingIfDriverStartedParkingmeter() throws Exception {
+	public void shouldReturnTrueCheckingIfRegularDriverStartedParkingmeter() throws Exception {
 
 		LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(3);
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAgo, regularDriverAlreadyParking);
 		database.save(parkingRegularDriverParkAction);
 
 		mvc.perform(get("/api/check/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
+				.andExpect(content().string("true"));
+	}
+
+	@Test
+	public void shouldReturnFalseCheckingIfDisabledDriverStartedParkingmeter() throws Exception {
+
+		mvc.perform(get("/api/check/" + disabledDriver.getLicensePlate())).andExpect(status().isOk())
+				.andExpect(content().string("false"));
+	}
+
+	@Test
+	public void shouldReturnTrueCheckingIfDisableddDriverStartedParkingmeter() throws Exception {
+
+		LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(3);
+		parkingDisabledDriverParkAction = new ParkAction(threeHoursAgo, disabledDriverAlreadyParking);
+		database.save(parkingDisabledDriverParkAction);
+
+		mvc.perform(get("/api/check/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(content().string("true"));
 	}
 

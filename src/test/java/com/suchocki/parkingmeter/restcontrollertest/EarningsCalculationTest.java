@@ -19,7 +19,7 @@ public class EarningsCalculationTest extends ParkingRestControllerTest {
 	private MockMvc mvc;
 
 	@Test
-	public void shouldReturnEarningsInPLNForTodayAfterAddingSeveralPaymentsToDatabase() throws Exception {
+	public void shouldReturnEarningsInPLNForTodayAfterAddingTwoOtherPaymentsToDatabase() throws Exception {
 
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime oneDayAgo = now.minusDays(1);
@@ -33,6 +33,28 @@ public class EarningsCalculationTest extends ParkingRestControllerTest {
 
 		mvc.perform(get("/api/earnings/" + today)).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(15.45)));
+	}
+
+	@Test
+	public void shouldReturnEarningsInPLNForTodayAfterAddingSeveralOtherPaymentsToDatabase() throws Exception {
+
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime oneDayAgo = now.minusDays(1);
+		LocalDateTime threeDaysAgo = now.minusDays(3);
+		LocalDateTime oneMonthThreeDaysAgo = now.minusMonths(1).minusDays(3);
+
+		database.save(new DriverPayment(plnCurrency, new BigDecimal(9.50), threeDaysAgo, regularDriver));
+		database.save(new DriverPayment(plnCurrency, new BigDecimal(11.00), oneMonthThreeDaysAgo, regularDriver));
+		database.save(new DriverPayment(plnCurrency, new BigDecimal(3.00), oneDayAgo, regularDriver));
+		database.save(new DriverPayment(plnCurrency, new BigDecimal(9.20), oneDayAgo, regularDriver));
+		database.save(new DriverPayment(plnCurrency, new BigDecimal(3.50), now, regularDriver));
+		database.save(new DriverPayment(plnCurrency, new BigDecimal(4.00), now, regularDriver));
+		database.save(new DriverPayment(plnCurrency, new BigDecimal(8.50), now, regularDriver));
+
+		String today = now.toLocalDate().toString();
+
+		mvc.perform(get("/api/earnings/" + today)).andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].fee", is(16.00)));
 	}
 
 }
