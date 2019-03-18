@@ -1,15 +1,12 @@
 package com.suchocki.parkingmeter.database;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import com.suchocki.parkingmeter.dao.CurrencyDAOImpl;
 import com.suchocki.parkingmeter.entity.Currency;
 import com.suchocki.parkingmeter.entity.Driver;
 import com.suchocki.parkingmeter.entity.DriverPayment;
@@ -159,7 +156,9 @@ public final class FakeDatabaseStub {
 
 	/* DriverPayment management */
 	private void saveDriverPayment(DriverPayment driverPayment) {
-		driverPayment.setId(driverPayments.size() + 1);
+		synchronized (driverPayment) {
+			driverPayment.setId(driverPayments.size() + 1);
+		}
 		driverPayments.add(driverPayment);
 	}
 
@@ -183,8 +182,10 @@ public final class FakeDatabaseStub {
 		if (getParkAction(parkAction.getId()).isPresent()) {
 			updateParkAction(parkAction);
 		} else {
-			parkAction.setId(parkActions.size() + 1);
-			parkActions.add(parkAction);
+			synchronized (parkAction) {
+				parkAction.setId(parkActions.size() + 1);
+				parkActions.add(parkAction);
+			}
 		}
 	}
 
