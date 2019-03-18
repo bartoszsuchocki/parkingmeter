@@ -1,7 +1,6 @@
 package com.suchocki.parkingmeter.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,8 +11,6 @@ public interface DriverPaymentService { // not extending Service, because paymen
 	public void save(DriverPayment driverPayment);
 
 	public Optional<DriverPayment> get(int id);
-
-	public List<DriverPayment> getAll();
 
 	public List<DriverCharge> getPaymentsSumByday(LocalDate date);
 

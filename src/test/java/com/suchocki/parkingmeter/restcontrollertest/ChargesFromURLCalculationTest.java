@@ -23,11 +23,11 @@ import com.suchocki.parkingmeter.entity.ParkAction;
 @SpringBootTest(classes = ParkingmeterApplication.class)
 @AutoConfigureMockMvc
 
-public class ChargesFromURLCalculationTest extends ParkingRestControllerTest{
+public class ChargesFromURLCalculationTest extends ParkingRestControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
-	
+
 	private ParkAction parkingRegularDriverParkAction;
 	private ParkAction parkingDisabledDriverParkAction;
 
@@ -35,7 +35,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest{
 	public void shouldReturnDriverChargeForParkingTillNow4hoursForRegularDriver() throws Exception {
 		LocalDateTime threeHoursAnd20MinutesAgo = LocalDateTime.now().minusHours(3).minusMinutes(20);
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAnd20MinutesAgo, regularDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
+		database.save(parkingRegularDriverParkAction);
 
 		mvc.perform(get("/api/charge/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(10.5)));
@@ -45,7 +45,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest{
 	public void shouldReturnDriverChargeForParkingTillNow2hoursForRegularDriver() throws Exception {
 		LocalDateTime oneHourAnd30MinutesAgo = LocalDateTime.now().minusHours(1).minusMinutes(30);
 		parkingRegularDriverParkAction = new ParkAction(oneHourAnd30MinutesAgo, regularDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
+		database.save(parkingRegularDriverParkAction);
 
 		mvc.perform(get("/api/charge/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(3.00)));
@@ -55,7 +55,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest{
 	public void shouldReturnDriverChargeForParkingTillNow1hourForRegularDriver() throws Exception {
 		LocalDateTime fiftyNineMinutesAgo = LocalDateTime.now().minusMinutes(59);
 		parkingRegularDriverParkAction = new ParkAction(fiftyNineMinutesAgo, regularDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
+		database.save(parkingRegularDriverParkAction);
 
 		mvc.perform(get("/api/charge/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(1.00)));
@@ -65,7 +65,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest{
 	public void shouldReturnDriverChargeForParkingTillNow4hoursForDisabledDriver() throws Exception {
 		LocalDateTime threeHoursAnd20MinutesAgo = LocalDateTime.now().minusHours(3).minusMinutes(20);
 		parkingDisabledDriverParkAction = new ParkAction(threeHoursAnd20MinutesAgo, disabledDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
+		database.save(parkingDisabledDriverParkAction);
 
 		mvc.perform(get("/api/charge/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(7.28)));
@@ -75,7 +75,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest{
 	public void shouldReturnDriverChargeForParkingTillNow2hoursForDisabledDriver() throws Exception {
 		LocalDateTime oneHourAnd30MinutesAgo = LocalDateTime.now().minusHours(1).minusMinutes(30);
 		parkingDisabledDriverParkAction = new ParkAction(oneHourAnd30MinutesAgo, disabledDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
+		database.save(parkingDisabledDriverParkAction);
 
 		mvc.perform(get("/api/charge/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(2.00)));
@@ -85,7 +85,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest{
 	public void shouldReturnDriverChargeForParkingTillNow1hourForDisabledDriver() throws Exception {
 		LocalDateTime ThirtyMinutesAgo = LocalDateTime.now().minusMinutes(30);
 		parkingDisabledDriverParkAction = new ParkAction(ThirtyMinutesAgo, disabledDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
+		database.save(parkingDisabledDriverParkAction);
 
 		mvc.perform(get("/api/charge/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(0.00)));

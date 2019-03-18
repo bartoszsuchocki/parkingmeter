@@ -36,11 +36,6 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 	}
 
 	@Override
-	public List<DriverPayment> getAll() {
-		return driverPaymentDAO.getAll();
-	}
-
-	@Override
 	public List<DriverPayment> getByDay(LocalDate date) {
 		return driverPaymentDAO.getByDay(date);
 	}
@@ -61,41 +56,5 @@ public class DriverPaymentServiceImpl implements DriverPaymentService {
 		}
 
 		return resultList;
-
-//		Map<Currency, BigDecimal> paymentsSums = new LinkedHashMap<>(); // payments sums in different currencies
-//		List<Currency> currencies = currencyService.getAll();
-//
-//		if (currencies == null) {
-//			return null;
-//		}
-//
-//		/* inserting '0 values' in order to add values to them later' */
-//		for (Currency currency : currencies) {
-//			paymentsSums.put(currency, new BigDecimal(0D).setScale(2, RoundingMode.HALF_UP));
-//		}
-//
-//		/* end of inserting '0 values' */
-//
-//		/* summing */
-//		List<DriverPayment> paymentsThisDay = getByDay(date);
-//		for (DriverPayment payment : paymentsThisDay) {
-//			if (payment.getCurrency() == null) {
-//				continue;
-//			}
-//			BigDecimal fee = paymentsSums.get(payment.getCurrency());
-//			paymentsSums.replace(payment.getCurrency(), fee.add(payment.getFee()).setScale(2, RoundingMode.HALF_UP));
-//
-//		}
-//		/* end of summing */
-//
-//		List<DriverCharge> resultList = new ArrayList<>();
-//
-//		/* converting sum map to list */
-//		for (Currency currency : paymentsSums.keySet()) {
-//			resultList.add(new DriverCharge(currency, paymentsSums.get(currency)));
-//		}
-//		/* end of converting sum map to list */
-//
-//		return resultList;
 	}
 }

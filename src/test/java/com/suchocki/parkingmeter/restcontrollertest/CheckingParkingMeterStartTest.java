@@ -33,7 +33,7 @@ public class CheckingParkingMeterStartTest extends ParkingRestControllerTest {
 
 		LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(3);
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAgo, regularDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
+		database.save(parkingRegularDriverParkAction);
 
 		mvc.perform(get("/api/check/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(content().string("true"));

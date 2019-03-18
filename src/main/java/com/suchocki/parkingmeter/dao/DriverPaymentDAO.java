@@ -11,7 +11,5 @@ public interface DriverPaymentDAO { // not extending DAO, because payments shoul
 
 	public Optional<DriverPayment> get(int id);
 
-	public List<DriverPayment> getAll();
-
 	public List<DriverPayment> getByDay(LocalDate date);
 }

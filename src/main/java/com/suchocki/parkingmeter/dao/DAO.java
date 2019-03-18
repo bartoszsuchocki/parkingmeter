@@ -1,6 +1,5 @@
 package com.suchocki.parkingmeter.dao;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface DAO<T, T2> { // T is object type, T2 is id type, this interface exists to avoid boilerplate
@@ -8,8 +7,6 @@ public interface DAO<T, T2> { // T is object type, T2 is id type, this interface
 	public void save(T object);
 
 	public Optional<T> get(T2 id);
-
-	public List<T> getAll();
 
 	public void update(T object);
 

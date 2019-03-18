@@ -44,4 +44,10 @@ public class DriverPayment extends DriverCharge {
 	public void setDriver(Driver driver) {
 		this.driver = driver;
 	}
+
+	@Override
+	public String toString() {
+		return "DriverPayment [id=" + id + ", payDate=" + payDate + ", driver=" + driver + "]";
+	}
+	
 }

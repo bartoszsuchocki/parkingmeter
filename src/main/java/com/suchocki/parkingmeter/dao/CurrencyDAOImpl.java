@@ -2,8 +2,8 @@ package com.suchocki.parkingmeter.dao;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.suchocki.parkingmeter.database.FakeDatabaseStub;
@@ -12,35 +12,31 @@ import com.suchocki.parkingmeter.entity.Currency;
 @Repository
 public class CurrencyDAOImpl implements CurrencyDAO {
 
+	@Autowired
+	private FakeDatabaseStub database;
+
 	@Override
 	public void save(Currency currency) {
-		if (get(currency.getAcronym()).isPresent()) {
-			update(currency);
-		} else {
-			FakeDatabaseStub.currencies.add(currency);
-		}
+		database.save(currency);
 	}
 
 	@Override
 	public Optional<Currency> get(String id) {
-		return FakeDatabaseStub.currencies.stream().filter(currency -> currency.getAcronym().equals(id)).findFirst();
+		return database.get(id, Currency.class);
 	}
 
-	@Override
 	public List<Currency> getAll() {
-		return FakeDatabaseStub.currencies;
+		return database.getAll(Currency.class);
 	}
 
 	@Override
 	public void update(Currency currency) {
-		Predicate<Currency> predicate = (currencyItem) -> (currencyItem.getAcronym().equals(currency.getAcronym()));
-		Optional<Currency> currencyToUpdate = FakeDatabaseStub.currencies.stream().filter(predicate).findFirst();
-		currencyToUpdate.ifPresent(toUpdate -> toUpdate.updateProperties(currency));
+		database.update(currency);
 	}
 
 	@Override
 	public void delete(String id) {
-		FakeDatabaseStub.currencies.removeIf(currency -> currency.getAcronym().equals(id));
+		database.update(id);
 	}
 
 }

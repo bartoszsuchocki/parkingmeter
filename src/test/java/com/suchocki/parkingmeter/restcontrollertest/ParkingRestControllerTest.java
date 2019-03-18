@@ -1,9 +1,10 @@
 package com.suchocki.parkingmeter.restcontrollertest;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -14,9 +15,10 @@ import com.suchocki.parkingmeter.ParkingmeterApplication;
 import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.Currency;
 import com.suchocki.parkingmeter.entity.Driver;
+import com.suchocki.parkingmeter.entity.DriverPayment;
 import com.suchocki.parkingmeter.entity.DriverType;
+import com.suchocki.parkingmeter.entity.ParkAction;
 import com.suchocki.parkingmeter.entity.ParkingCost;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ParkingmeterApplication.class)
@@ -39,8 +41,11 @@ public class ParkingRestControllerTest {
 	protected static String disabledDriverJSON;
 	protected static String regularDriverAlreadyParkingJSON;
 	protected static String disabledDriverAlreadyParkingJSON;
-	
+
 	private static ObjectMapper mapper;
+
+	@Autowired
+	protected FakeDatabaseStub database;
 
 	@BeforeClass
 	public static void prepareObjects() throws JsonProcessingException {
@@ -67,25 +72,22 @@ public class ParkingRestControllerTest {
 		regularDriverAlreadyParkingJSON = mapper.writeValueAsString(regularDriverAlreadyParking);
 		disabledDriverAlreadyParkingJSON = mapper.writeValueAsString(disabledDriverAlreadyParking);
 	}
+
 	@Before
 	public void prepareFakeDatabase() {
-		FakeDatabaseStub.currencies.clear();
-		FakeDatabaseStub.drivers.clear();
-		FakeDatabaseStub.parkActions.clear();
-		FakeDatabaseStub.driverPayments.clear();
+		database.save(plnCurrency);
 
-		FakeDatabaseStub.currencies.add(plnCurrency);
-
-		FakeDatabaseStub.drivers.add(regularDriver);
-		FakeDatabaseStub.drivers.add(disabledDriver);
-		FakeDatabaseStub.drivers.add(regularDriverAlreadyParking);
-		FakeDatabaseStub.drivers.add(disabledDriverAlreadyParking);
+		database.save(regularDriver);
+		database.save(disabledDriver);
+		database.save(regularDriverAlreadyParking);
+		database.save(disabledDriverAlreadyParking);
 	}
-	@AfterClass
-	public static void clearFakeDatabase() {
-		FakeDatabaseStub.currencies.clear();
-		FakeDatabaseStub.drivers.clear();
-		FakeDatabaseStub.parkActions.clear();
-		FakeDatabaseStub.driverPayments.clear();
+
+	@After
+	public void clearFakeDatabase() {
+		database.clear(Currency.class);
+		database.clear(Driver.class);
+		database.clear(DriverPayment.class);
+		database.clear(ParkAction.class);
 	}
 }

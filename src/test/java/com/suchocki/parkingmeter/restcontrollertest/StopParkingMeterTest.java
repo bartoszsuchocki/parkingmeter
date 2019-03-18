@@ -11,8 +11,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import com.suchocki.parkingmeter.database.FakeDatabaseStub;
 import com.suchocki.parkingmeter.entity.ParkAction;
 
 public class StopParkingMeterTest extends ParkingRestControllerTest {
@@ -27,7 +25,7 @@ public class StopParkingMeterTest extends ParkingRestControllerTest {
 	public void shouldStopParkingMeterRegularDriver() throws Exception {
 		LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(3);
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAgo, regularDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingRegularDriverParkAction);
+		database.save(parkingRegularDriverParkAction);
 
 		mvc.perform(
 				put("/api/stop").contentType(MediaType.APPLICATION_JSON_UTF8).content(regularDriverAlreadyParkingJSON))
@@ -38,7 +36,7 @@ public class StopParkingMeterTest extends ParkingRestControllerTest {
 	public void shouldStopParkingMeterDisabledDriver() throws Exception {
 		LocalDateTime threeHoursAgo = LocalDateTime.now().minusHours(3);
 		parkingDisabledDriverParkAction = new ParkAction(threeHoursAgo, disabledDriverAlreadyParking);
-		FakeDatabaseStub.parkActions.add(parkingDisabledDriverParkAction);
+		database.save(parkingDisabledDriverParkAction);
 
 		mvc.perform(
 				put("/api/stop").contentType(MediaType.APPLICATION_JSON_UTF8).content(disabledDriverAlreadyParkingJSON))

@@ -25,7 +25,6 @@ public class CurrencyServiceImpl implements CurrencyService {
 		return currencyDAO.get(id);
 	}
 
-	@Override
 	public List<Currency> getAll() {
 		return currencyDAO.getAll();
 	}
