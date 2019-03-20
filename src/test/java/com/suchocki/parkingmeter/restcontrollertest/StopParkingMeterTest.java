@@ -28,7 +28,7 @@ public class StopParkingMeterTest extends ParkingRestControllerTest {
 		database.save(parkingRegularDriverParkAction);
 
 		mvc.perform(
-				put("/api/stop").contentType(MediaType.APPLICATION_JSON_UTF8).content(regularDriverAlreadyParkingJSON))
+				put("/api/park-actions").contentType(MediaType.APPLICATION_JSON_UTF8).content(regularDriverAlreadyParkingJSON))
 				.andExpect(jsonPath("$[0].fee", is(10.50))).andExpect(status().isOk());
 	}
 
@@ -39,7 +39,7 @@ public class StopParkingMeterTest extends ParkingRestControllerTest {
 		database.save(parkingDisabledDriverParkAction);
 
 		mvc.perform(
-				put("/api/stop").contentType(MediaType.APPLICATION_JSON_UTF8).content(disabledDriverAlreadyParkingJSON))
+				put("/api/park-actions").contentType(MediaType.APPLICATION_JSON_UTF8).content(disabledDriverAlreadyParkingJSON))
 				.andExpect(jsonPath("$[0].fee", is(7.28))).andExpect(status().isOk());
 	}
 }

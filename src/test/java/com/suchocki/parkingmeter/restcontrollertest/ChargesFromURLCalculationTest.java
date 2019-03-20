@@ -36,7 +36,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest {
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAnd20MinutesAgo, regularDriverAlreadyParking);
 		database.save(parkingRegularDriverParkAction);
 
-		mvc.perform(get("/api/charge/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
+		mvc.perform(get("/api/charges/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(10.5)));
 	}
 
@@ -46,7 +46,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest {
 		parkingRegularDriverParkAction = new ParkAction(oneHourAnd30MinutesAgo, regularDriverAlreadyParking);
 		database.save(parkingRegularDriverParkAction);
 
-		mvc.perform(get("/api/charge/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
+		mvc.perform(get("/api/charges/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(3.00)));
 	}
 
@@ -56,7 +56,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest {
 		parkingRegularDriverParkAction = new ParkAction(fiftyNineMinutesAgo, regularDriverAlreadyParking);
 		database.save(parkingRegularDriverParkAction);
 
-		mvc.perform(get("/api/charge/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
+		mvc.perform(get("/api/charges/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(1.00)));
 	}
 
@@ -66,7 +66,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest {
 		parkingDisabledDriverParkAction = new ParkAction(threeHoursAnd20MinutesAgo, disabledDriverAlreadyParking);
 		database.save(parkingDisabledDriverParkAction);
 
-		mvc.perform(get("/api/charge/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
+		mvc.perform(get("/api/charges/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(7.28)));
 	}
 
@@ -76,7 +76,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest {
 		parkingDisabledDriverParkAction = new ParkAction(oneHourAnd30MinutesAgo, disabledDriverAlreadyParking);
 		database.save(parkingDisabledDriverParkAction);
 
-		mvc.perform(get("/api/charge/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
+		mvc.perform(get("/api/charges/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(2.00)));
 	}
 
@@ -86,7 +86,7 @@ public class ChargesFromURLCalculationTest extends ParkingRestControllerTest {
 		parkingDisabledDriverParkAction = new ParkAction(ThirtyMinutesAgo, disabledDriverAlreadyParking);
 		database.save(parkingDisabledDriverParkAction);
 
-		mvc.perform(get("/api/charge/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
+		mvc.perform(get("/api/charges/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].fee", is(0.00)));
 	}
 }

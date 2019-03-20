@@ -23,7 +23,7 @@ public class CheckingParkingMeterStartTest extends ParkingRestControllerTest {
 	@Test
 	public void shouldReturnFalseCheckingIfRegularDriverStartedParkingmeter() throws Exception {
 
-		mvc.perform(get("/api/check/" + regularDriver.getLicensePlate())).andExpect(status().isOk())
+		mvc.perform(get("/api/park-actions/" + regularDriver.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(content().string("false"));
 	}
 
@@ -34,14 +34,14 @@ public class CheckingParkingMeterStartTest extends ParkingRestControllerTest {
 		parkingRegularDriverParkAction = new ParkAction(threeHoursAgo, regularDriverAlreadyParking);
 		database.save(parkingRegularDriverParkAction);
 
-		mvc.perform(get("/api/check/" + regularDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
-				.andExpect(content().string("true"));
+		mvc.perform(get("/api/park-actions/" + regularDriverAlreadyParking.getLicensePlate()))
+				.andExpect(status().isOk()).andExpect(content().string("true"));
 	}
 
 	@Test
 	public void shouldReturnFalseCheckingIfDisabledDriverStartedParkingmeter() throws Exception {
 
-		mvc.perform(get("/api/check/" + disabledDriver.getLicensePlate())).andExpect(status().isOk())
+		mvc.perform(get("/api/park-actions/" + disabledDriver.getLicensePlate())).andExpect(status().isOk())
 				.andExpect(content().string("false"));
 	}
 
@@ -52,8 +52,8 @@ public class CheckingParkingMeterStartTest extends ParkingRestControllerTest {
 		parkingDisabledDriverParkAction = new ParkAction(threeHoursAgo, disabledDriverAlreadyParking);
 		database.save(parkingDisabledDriverParkAction);
 
-		mvc.perform(get("/api/check/" + disabledDriverAlreadyParking.getLicensePlate())).andExpect(status().isOk())
-				.andExpect(content().string("true"));
+		mvc.perform(get("/api/park-actions/" + disabledDriverAlreadyParking.getLicensePlate()))
+				.andExpect(status().isOk()).andExpect(content().string("true"));
 	}
 
 }

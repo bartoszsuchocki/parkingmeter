@@ -38,18 +38,18 @@ public class ParkingRestController {
 		binder.registerCustomEditor(LocalDate.class, new DatePropertyEditor());
 	}
 
-	@PostMapping("/start")
+	@PostMapping("/park-actions")
 	public ParkAction start(@RequestBody Driver driver) {
 		return driverService.startParkingMeter(driver);
 	}
 
-	@PutMapping("/stop")
+	@PutMapping("/park-actions")
 	public List<DriverCharge> stop(@RequestBody Driver driver) throws NoParkActionStartedException {
 		ParkAction finishedParkAction = driverService.stopParkingMeter(driver);
 		return finishedParkAction.calculateCharges();
 	}
 
-	@GetMapping("/check/{licensePlate}")
+	@GetMapping("/park-actions/{licensePlate}")
 	public boolean check(@PathVariable("licensePlate") String licensePlate) {
 		return driverService.startedParkingMeter(licensePlate);
 	}
@@ -59,12 +59,12 @@ public class ParkingRestController {
 		return driverService.checkChargeForParkingTillNow(driver);
 	}
 
-	@GetMapping("/charge/{licensePlate}")
+	@GetMapping("/charges/{licensePlate}")
 	public List<DriverCharge> feeIfStoppedNow(@PathVariable("licensePlate") String licensePlate) {
 		return driverService.checkChargeForParkingTillNow(licensePlate);
 	}
 
-	@PostMapping("/pay")
+	@PostMapping("/payment")
 	public DriverPayment pay(@RequestBody DriverPayment payment) {
 		return driverService.pay(payment);
 	}

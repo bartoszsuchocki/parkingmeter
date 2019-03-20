@@ -18,7 +18,7 @@ public class StartParkingMeterTest extends ParkingRestControllerTest{
 	@Test
 	public void shouldStartParkingMeterRegularDriver() throws Exception {
 
-		mvc.perform(post("/api/start").contentType(MediaType.APPLICATION_JSON_UTF8).content(regularDriverJSON))
+		mvc.perform(post("/api/park-actions").contentType(MediaType.APPLICATION_JSON_UTF8).content(regularDriverJSON))
 				.andExpect(jsonPath("$.driver.licensePlate", is(regularDriver.getLicensePlate())))
 				.andExpect(jsonPath("$.end").isEmpty()).andExpect(status().isOk());
 	}
@@ -26,7 +26,7 @@ public class StartParkingMeterTest extends ParkingRestControllerTest{
 	@Test
 	public void shouldStartParkingMeterDisabledDriver() throws Exception {
 
-		mvc.perform(post("/api/start").contentType(MediaType.APPLICATION_JSON_UTF8).content(disabledDriverJSON))
+		mvc.perform(post("/api/park-actions").contentType(MediaType.APPLICATION_JSON_UTF8).content(disabledDriverJSON))
 				.andExpect(jsonPath("$.driver.licensePlate", is(disabledDriver.getLicensePlate())))
 				.andExpect(jsonPath("$.end").isEmpty()).andExpect(status().isOk());
 	}
