@@ -17,3 +17,4 @@ Additional features/facilities:
 * Spring REST
 * Spring Test
 * JUnit
+* Maven
